@@ -18,6 +18,7 @@
   - Browse to the `rs2-assignment` folder and run `npm install` to install the front end libraries
   - Browse to the `backend` folder and run `npm install` to install the backend libraries
   - Database configurations need to added in the `index.js` file located inside the backend folder
+  - SQL schema can be found on the project itseld, import that to the database
  
 ## Starting the application
 
