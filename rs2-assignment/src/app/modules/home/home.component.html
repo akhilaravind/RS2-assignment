@@ -1,0 +1,73 @@
+<app-nav></app-nav>
+<div class="container container-row-margin">
+    <div class="row product-listing">
+        <ng-template [ngIf]="(cartItems | async)?.length">
+            <div class="col-12 col-md-6 col-lg-4" *ngFor="let cart of (cartItems | async)">
+                <div class="card">
+                    <div class="card-body">
+                        <span class="remove-cart-item" (click)="removeCartItem(cart)">
+                            <i class="mdi mdi-close-circle-outline"></i>
+                        </span>
+                        <h4 class="card-title">
+                            {{cart.name}}</h4>
+                        <h6>
+                            <i class="mdi mdi-cart"></i>
+                            {{cart.qty}}
+                        </h6>
+                        <h6>
+                            {{cart.type}}
+                        </h6>
+                        <p class="card-text">{{cart.description}}</p>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+
+        <div class="col-md-12" *ngIf="!(cartItems | async)?.length">
+            <h3 class="text-center">No items in the cart</h3>
+        </div>
+    </div>
+    <form #form="ngForm" (submit)="searchProduct(form)">
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                <input type="text" class="form-control" name="product" [(ngModel)]="formModel.product"
+                    placeholder="Product Name" />
+                <span class="error-text" *ngIf="error">{{error}}</span>
+            </div>
+
+            <div class="col-md-3 col-sm-12">
+                <select name="type" class="form-control" [(ngModel)]="formModel.type">
+                    <option value="" selected>select product type</option>
+                    <option *ngFor="let type of selectOptions" [value]="type">{{type}}</option>
+                </select>
+            </div>
+            <div class="col-md-3 col-sm-12">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </div>
+    </form>
+    <div class="row">
+        <ng-template [ngIf]="searchResult.length">
+            <div class="col-12 col-md-6 col-lg-4" *ngFor="let product of searchResult; let index = index">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            {{product.name}}</h4>
+                        <p class="card-text">{{product.description}}</p>
+                        <div class="row">
+                            <div class="col-md-5 col-sm-12">
+                                <input class="form-control" placeholder="Qty" [value]="product.qty" min="1"
+                                    type="number" (change)="updateProductQty(index, $event)">
+                            </div>
+                            <div class="col-md-7 col-sm-12">
+                                <button class="btn btn-danger btn-block" (click)="addToCart(product)">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </div>
+</div>
+
+<confirm-delete (confirm)="removeItem($event)" [item]="itemToRemove"></confirm-delete>
